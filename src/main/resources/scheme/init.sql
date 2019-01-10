@@ -1,0 +1,7 @@
+DROP TABLE IF EXISTS `demo`;
+CREATE TABLE `demo` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL DEFAULT '',
+  `age` int(11) NOT NULL DEFAULT '-1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
