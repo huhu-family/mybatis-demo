@@ -1,4 +1,4 @@
-package com.pagoda.huhu.config;
+package com.huhu.config;
 
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
@@ -21,13 +21,13 @@ import java.io.IOException;
  */
 
 @Configuration
-@MapperScan("com.pagoda.huhu.dao")
+@MapperScan("com.huhu.dao")
 public class MyBatisConfig {
 
     /**   mybatis 配置路径     */
     private static String MYBATIS_CONFIG = "mybatis/mybatis-config.xml";
     /**   mybatis mapper resource 路径     */
-    private static String MAPPER_PATH = "mybatis/*Dao.xml";
+    private static String MAPPER_PATH = "mybatis/**/*Dao.xml";
 
     @Autowired
     private DataSource dataSource;

@@ -1,6 +1,6 @@
-package com.pagoda.huhu.dao;
+package com.huhu.dao;
 
-import com.pagoda.huhu.entity.DemoDO;
+import com.huhu.domain.entity.DemoDO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 

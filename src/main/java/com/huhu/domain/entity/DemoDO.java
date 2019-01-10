@@ -1,9 +1,7 @@
-package com.pagoda.huhu.entity;
+package com.huhu.domain.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
 
 /**
  * @Author: wilimm
