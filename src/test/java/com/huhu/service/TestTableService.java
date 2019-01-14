@@ -1,6 +1,8 @@
 package com.huhu.service;
 
+import com.huhu.domain.entity.PojoClass;
 import com.huhu.domain.entity.Table;
+import com.huhu.utils.TableUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ public class TestTableService {
     @Test
     public void testGetTable() {
         Table table = tableService.getTable("freeze_ip");
-        System.out.println(table);
+        PojoClass pojoClass = TableUtils.tableToPojo(table);
+        System.out.println(pojoClass);
     }
 }
