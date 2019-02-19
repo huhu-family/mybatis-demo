@@ -58,25 +58,24 @@ public class TableService {
                 // 默认 id 是主键，且自增
                 if ("id".equals(columnName)) {
                     column.setComment("自增主键");
-                    continue;
-                }
+                } else {
+                    // columnSQL[2]=NOT
+                    // columnSQL[3]=NULL
+                    // columnSQL[4]=DEFAULT
+                    String defalutValue = columnSQL[5];
+                    column.setDefaultValue(defalutValue.replaceAll("'", ""));
 
-                // columnSQL[2]=NOT
-                // columnSQL[3]=NULL
-                // columnSQL[4]=DEFAULT
-                String defalutValue = columnSQL[5];
-                column.setDefaultValue(defalutValue.replaceAll("'", ""));
-
-                int commentIndex = 6;
-                while(!"COMMENT".equalsIgnoreCase(columnSQL[commentIndex])) {
-                    commentIndex++;
+                    int commentIndex = 6;
+                    while(!"COMMENT".equalsIgnoreCase(columnSQL[commentIndex])) {
+                        commentIndex++;
+                    }
+                    StringBuilder columnComment = new StringBuilder();
+                    for (int j = commentIndex + 1; j < columnSQL.length; j++){
+                        columnComment.append(columnSQL[j]).append(" ");
+                    }
+                    // 去掉前面的 ' 符号，以及后面的 ', 和空格
+                    column.setComment(columnComment.substring(1, columnComment.length() - 3));
                 }
-                StringBuilder columnComment = new StringBuilder();
-                for (int j = commentIndex + 1; j < columnSQL.length; j++){
-                    columnComment.append(columnSQL[j]).append(" ");
-                }
-                // 去掉前面的 ' 符号，以及后面的 ', 和空格
-                column.setComment(columnComment.substring(1, columnComment.length() - 3));
 
                 table.addColumn(column);
             }
