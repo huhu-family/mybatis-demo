@@ -17,6 +17,11 @@ public class TableUtils {
     private static final String DO_PACKAGE = "com.huhu.domain.entity";
 
     /**
+     * DO 的后缀
+     */
+    private static final String DO_SUFFIX = "DO";
+
+    /**
      * 用户名
      */
     private static final String USER_NAME = "wilimm";
@@ -24,7 +29,7 @@ public class TableUtils {
     public static PojoClass tableToPojo(Table table) {
         PojoClass pojoClass = new PojoClass();
         pojoClass.set_package(DO_PACKAGE);
-        pojoClass.setClassName(underlineToBigCamelCase(table.getName()));
+        pojoClass.setClassName(underlineToBigCamelCase(table.getName()) + DO_SUFFIX);
 
         PojoClass.ClassComment classComment = new PojoClass.ClassComment(table.getComment(), USER_NAME, new Date());
         pojoClass.setComment(classComment);
@@ -88,7 +93,15 @@ public class TableUtils {
                 javaType = "Integer";
                 break;
             case "datetime":
+            case "date":
                 javaType = "Date";
+                break;
+            case "char":
+            case "varchar":
+                javaType = "String";
+                break;
+            case "decimal":
+                javaType = "BigDecimal";
                 break;
         }
         return javaType;

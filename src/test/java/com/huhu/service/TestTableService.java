@@ -21,7 +21,7 @@ public class TestTableService {
 
     @Test
     public void testGetTable() {
-        Table table = tableService.getTable("freeze_ip");
+        Table table = tableService.getTable("wallet_recharge_merchant");
         PojoClass pojoClass = TableUtils.tableToPojo(table);
         System.out.println(pojoClass);
     }
