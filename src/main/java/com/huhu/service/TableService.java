@@ -80,8 +80,8 @@ public class TableService {
                 table.addColumn(column);
             }
             String lastLine = lines[lines.length - 1];
-            // 去掉前面的 =' 符号，以及后面的', 符号
-            String tableComment = lastLine.substring(lastLine.lastIndexOf("=") + 2, lastLine.length() - 2);
+            // 去掉前面的 =' 符号，以及后面的' 符号
+            String tableComment = lastLine.substring(lastLine.lastIndexOf("=") + 2, lastLine.length() - 1);
             table.setComment(tableComment);
 
             return table;
