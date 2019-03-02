@@ -1,6 +1,5 @@
 package com.huhu.domain.entity;
 
-import com.alibaba.druid.sql.visitor.functions.Char;
 import com.huhu.constants.CharacterConstants;
 import com.huhu.utils.DateUtils;
 import lombok.AllArgsConstructor;
