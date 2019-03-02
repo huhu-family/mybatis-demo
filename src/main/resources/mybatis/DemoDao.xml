@@ -5,7 +5,7 @@
 
     <resultMap id="BaseResultMap" type="com.huhu.domain.entity.DemoDO">
         <id column="id" property="id"/>
-        <id column="name" property="name"/>
+        <result column="name" property="name"/>
         <result column="age" property="age"/>
     </resultMap>
 

@@ -16,13 +16,19 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 public class TestTableService {
+
+    /**
+     * DO 所在的包
+     */
+    private static final String DO_PACKAGE = "com.huhu.domain.entity";
+
     @Autowired
     private TableService tableService;
 
     @Test
     public void testGetTable() {
-        Table table = tableService.getTable("wallet_recharge_merchant");
-        PojoClass pojoClass = TableUtils.tableToPojo(table);
+        Table table = tableService.getTable("withdraw_ext");
+        PojoClass pojoClass = TableUtils.tableToPojo(table, DO_PACKAGE);
         System.out.println(pojoClass);
     }
 }

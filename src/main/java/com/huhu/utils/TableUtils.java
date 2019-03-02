@@ -12,24 +12,16 @@ import java.util.Date;
 public class TableUtils {
 
     /**
-     * DO 所在的包
-     */
-    private static final String DO_PACKAGE = "com.huhu.domain.entity";
-
-    /**
-     * DO 的后缀
-     */
-    private static final String DO_SUFFIX = "DO";
-
-    /**
      * 用户名
      */
     private static final String USER_NAME = "wilimm";
 
-    public static PojoClass tableToPojo(Table table) {
+    public static PojoClass tableToPojo(Table table, String doPackage) {
         PojoClass pojoClass = new PojoClass();
-        pojoClass.set_package(DO_PACKAGE);
-        pojoClass.setClassName(underlineToBigCamelCase(table.getName()) + DO_SUFFIX);
+        pojoClass.set_package(doPackage);
+        pojoClass.setClassName(underlineToBigCamelCase(table.getName()));
+        pojoClass.setTableName(table.getName());
+
 
         PojoClass.ClassComment classComment = new PojoClass.ClassComment(table.getComment(), USER_NAME, new Date());
         pojoClass.setComment(classComment);
@@ -37,6 +29,7 @@ public class TableUtils {
         for (Table.Column column : table.getColumnList()) {
             PojoClass.Field field = new PojoClass.Field();
             field.setName(underlineToLittleCamelCase(column.getName()));
+            field.setColumnName(column.getName());
             field.setComment(column.getComment());
             field.setType(mysqlType2JavaType(column.getType()));
             pojoClass.addField(field);
@@ -46,7 +39,7 @@ public class TableUtils {
             }
         }
 
-        System.out.println(table);
+        //System.out.println(table);
         return pojoClass;
     }
 

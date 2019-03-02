@@ -21,11 +21,24 @@ import java.util.Set;
 @Data
 public class PojoClass {
 
+    /**
+     * DO 的后缀
+     */
+    private static final String DO_SUFFIX = "DO";
+
     public PojoClass() {
+        this(DO_SUFFIX);
+    }
+
+    public PojoClass(String classNameSuffix) {
         // 默认导入的类
         importList.add("lombok.Data;");
         importList.add("java.io.Serializable;");
+
+        this.classNameSuffix = classNameSuffix;
     }
+
+
 
     /**
      * 包名
@@ -48,6 +61,16 @@ public class PojoClass {
     private String className;
 
     /**
+     * Java DO 后缀
+     */
+    private String classNameSuffix;
+
+    /**
+     * 表名
+     */
+    private String tableName;
+
+    /**
      * serialVersionUID 使用默认值 1L
      */
     private static final long serialVersionUID = 1L;
@@ -64,6 +87,11 @@ public class PojoClass {
     public void addField(Field field) {
         fieldList.add(field);
     }
+
+    public String fullClassName() {
+        return _package + "." + className + classNameSuffix;
+    }
+
 
     @Data
     @AllArgsConstructor
@@ -100,6 +128,11 @@ public class PojoClass {
          * 字段名称
          */
         private String name;
+
+        /**
+         * 表中的字段名称
+         */
+        private String columnName;
     }
 
     @Override
@@ -125,7 +158,7 @@ public class PojoClass {
         // 默认的注解
         result.append("@Data").append(CharacterConstants.NEW_LINE);
 
-        result.append("public class ").append(className).append(" implements Serializable ")
+        result.append("public class ").append(className).append(classNameSuffix).append(" implements Serializable ")
                 .append(" {").append(CharacterConstants.NEW_LINE);
 
         result.append(CharacterConstants.NEW_LINE);
