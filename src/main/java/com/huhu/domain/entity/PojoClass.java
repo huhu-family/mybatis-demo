@@ -24,7 +24,7 @@ public class PojoClass {
     public PojoClass() {
         // 默认导入的类
         importList.add("lombok.Data;");
-        importList.add("java.io.Serializable");
+        importList.add("java.io.Serializable;");
     }
 
     /**
