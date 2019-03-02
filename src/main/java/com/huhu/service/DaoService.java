@@ -26,7 +26,7 @@ public class DaoService {
 
     public DaoService(String classNameSuffix) {
         // 默认导入的类
-        importList.add("import org.springframework.stereotype.Repository;");
+        importList.add("org.springframework.stereotype.Repository;");
         importList.add("org.apache.ibatis.annotations.Param;");
 
         this.classNameSuffix = classNameSuffix;
@@ -42,7 +42,7 @@ public class DaoService {
      */
     private String classNameSuffix;
 
-    public String generateDaoClass(PojoClass pojoClass, String daoPackage) {
+    public String generateDaoInterface(PojoClass pojoClass, String daoPackage) {
         StringBuilder result = new StringBuilder();
         result.append("package ").append(daoPackage).append(";");
 
@@ -64,7 +64,7 @@ public class DaoService {
         // 默认的注解
         result.append("@Repository").append(CharacterConstants.NEW_LINE);
 
-        result.append("public class ")
+        result.append("public interface ")
                 .append(pojoClass.getClassName())
                 .append(classNameSuffix)
                 .append(" {")

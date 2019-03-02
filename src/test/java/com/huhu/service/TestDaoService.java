@@ -23,12 +23,12 @@ public class TestDaoService {
     /**
      * DO 所在的包
      */
-    private static final String DO_PACKAGE = "me.huakai.dao.entity.wallet";
+    private static final String DO_PACKAGE = "me.huakai.dao.entity.video";
 
     /**
      * Dao 所在的包
      */
-    private static final String DAO_PACKAGE = "me.huakai.dao.mysql.wallet";
+    private static final String DAO_PACKAGE = "me.huakai.dao.mysql.video";
 
     @Autowired
     private TableService tableService;
@@ -40,14 +40,14 @@ public class TestDaoService {
 
     @Test
     public void test() throws IOException {
-        Table table = tableService.getTable("withdraw_ext");
+        Table table = tableService.getTable("video_trade");
         PojoClass pojoClass = TableUtils.tableToPojo(table, DO_PACKAGE);
 
         System.out.println();
         System.out.println();
         System.out.println();
 
-        String daoClass = daoService.generateDaoClass(pojoClass, DAO_PACKAGE);
+        String daoClass = daoService.generateDaoInterface(pojoClass, DAO_PACKAGE);
         System.out.println(daoClass);
 
         System.out.println();
