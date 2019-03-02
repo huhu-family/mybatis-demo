@@ -137,8 +137,9 @@ public class PojoClass {
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        result.append("package ").append(_package).append(CharacterConstants.NEW_LINE);
+        result.append("package ").append(_package).append(";");
 
+        result.append(CharacterConstants.NEW_LINE);
         result.append(CharacterConstants.NEW_LINE);
 
         for (String _import : importList) {

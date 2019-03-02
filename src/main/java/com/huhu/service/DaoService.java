@@ -44,8 +44,9 @@ public class DaoService {
 
     public String generateDaoClass(PojoClass pojoClass, String daoPackage) {
         StringBuilder result = new StringBuilder();
-        result.append("package ").append(daoPackage).append(CharacterConstants.NEW_LINE);
+        result.append("package ").append(daoPackage).append(";");
 
+        result.append(CharacterConstants.NEW_LINE);
         result.append(CharacterConstants.NEW_LINE);
 
         for (String _import : importList) {

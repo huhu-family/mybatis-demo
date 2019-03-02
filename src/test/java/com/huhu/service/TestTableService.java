@@ -29,6 +29,15 @@ public class TestTableService {
     public void testGetTable() {
         Table table = tableService.getTable("withdraw_ext");
         PojoClass pojoClass = TableUtils.tableToPojo(table, DO_PACKAGE);
+
+        System.out.println();
+        System.out.println();
+        System.out.println();
+
         System.out.println(pojoClass);
+
+        System.out.println();
+        System.out.println();
+        System.out.println();
     }
 }
