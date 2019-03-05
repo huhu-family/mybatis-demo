@@ -25,6 +25,11 @@ public class PojoClass {
      */
     private static final String DO_SUFFIX = "DO";
 
+    /**
+     * DTO 的后缀
+     */
+    private static final String DTO_SUFFIX = "DTO";
+
     public PojoClass() {
         this(DO_SUFFIX);
     }
@@ -172,6 +177,51 @@ public class PojoClass {
             result.append(CharacterConstants.TAB).append("/**").append(CharacterConstants.NEW_LINE)
                     .append(CharacterConstants.TAB).append(" * ").append(field.getComment()).append(CharacterConstants.NEW_LINE)
                     .append(CharacterConstants.TAB).append(" */").append(CharacterConstants.NEW_LINE);
+
+            result.append(CharacterConstants.TAB).append("private ")
+                    .append(field.getType()).append(" ").append(field.getName())
+                    .append(";").append(CharacterConstants.NEW_LINE);
+        }
+
+        result.append("}").append(CharacterConstants.NEW_LINE);
+
+        return result.toString();
+    }
+
+    public String toDTOString() {
+        StringBuilder result = new StringBuilder();
+        result.append("package ").append(_package).append(";");
+
+        result.append(CharacterConstants.NEW_LINE);
+        result.append(CharacterConstants.NEW_LINE);
+
+        result.append("import lombok.Data;").append(CharacterConstants.NEW_LINE);
+        result.append("import io.swagger.annotations.ApiModelProperty;").append(CharacterConstants.NEW_LINE);
+        result.append("import java.util.Date;").append(CharacterConstants.NEW_LINE);
+
+
+
+        result.append(CharacterConstants.NEW_LINE);
+
+        result.append("/**").append(CharacterConstants.NEW_LINE)
+                .append(" * @Author: ").append(comment.getUser()).append(CharacterConstants.NEW_LINE)
+                .append(" * @Date: ").append(DateUtils.format(comment.getCreateTime())).append(CharacterConstants.NEW_LINE)
+                .append(" */").append(CharacterConstants.NEW_LINE);
+
+        // 默认的注解
+        result.append("@Data").append(CharacterConstants.NEW_LINE);
+
+        result.append("public class ").append(className).append(DTO_SUFFIX)
+                .append(" {").append(CharacterConstants.NEW_LINE);
+
+        for (Field field : fieldList) {
+            result.append(CharacterConstants.NEW_LINE);
+
+            result.append(CharacterConstants.TAB)
+                    .append("@ApiModelProperty(")
+                    .append("\"").append(field.getComment()).append("\"")
+                    .append(")")
+                    .append(CharacterConstants.NEW_LINE);
 
             result.append(CharacterConstants.TAB).append("private ")
                     .append(field.getType()).append(" ").append(field.getName())
