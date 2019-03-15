@@ -84,6 +84,11 @@ public class DaoService {
         String findByIdMethod = genFindByIdMethod(pojoClass);
         result.append(findByIdMethod);
 
+        result.append(CharacterConstants.NEW_LINE);
+
+        String updateByPrimaryKeySelective = genUpdateByPrimaryKeySelective(pojoClass);
+        result.append(updateByPrimaryKeySelective);
+
 
         result.append("}").append(CharacterConstants.NEW_LINE);
 
@@ -117,6 +122,23 @@ public class DaoService {
                 .append("(@Param(")
                 .append("\"id\")")
                 .append(" Long id")
+                .append(");");
+
+        method.append(CharacterConstants.NEW_LINE);
+
+        return method.toString();
+    }
+
+    private String genUpdateByPrimaryKeySelective(PojoClass pojoClass) {
+        StringBuilder method = new StringBuilder();
+
+        method.append(CharacterConstants.TAB);
+
+        method.append("int ")
+                .append("updateByPrimaryKeySelective")
+                .append("(")
+                .append(pojoClass.getClassName()).append(pojoClass.getClassNameSuffix())
+                .append(" entity")
                 .append(");");
 
         method.append(CharacterConstants.NEW_LINE);

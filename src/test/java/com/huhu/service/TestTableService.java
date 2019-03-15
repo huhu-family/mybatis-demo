@@ -27,16 +27,16 @@ public class TestTableService {
 
     @Test
     public void testGetTable() {
-        Table table = tableService.getTable("wallet_recharge_merchant");
+        Table table = tableService.getTable("customer_deregistered");
         PojoClass pojoClass = TableUtils.tableToPojo(table, DO_PACKAGE);
 
         System.out.println();
         System.out.println();
         System.out.println();
 
-       // System.out.println(pojoClass.toString());
+        System.out.println(pojoClass.toString());
 
-        System.out.println(pojoClass.toDTOString());
+       // System.out.println(pojoClass.toDTOString());
 
         System.out.println();
         System.out.println();

@@ -40,7 +40,7 @@ public class TestDaoService {
 
     @Test
     public void test() throws IOException {
-        Table table = tableService.getTable("video_trade");
+        Table table = tableService.getTable("customer_deregistered");
         PojoClass pojoClass = TableUtils.tableToPojo(table, DO_PACKAGE);
 
         System.out.println();
