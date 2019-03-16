@@ -103,10 +103,10 @@ public class MapperXmlService {
                     ifELement.addText(CharacterConstants.TAB);
                     ifELement.addText(CharacterConstants.TAB);
 
-                    String testValue = filed.getColumnName() + " != null";
+                    String testValue = filed.getName() + " != null";
                     ifELement.addAttribute("test", testValue);
 
-                    String textValue = filed.getColumnName() + " = #{" + filed.getName() + "}";
+                    String textValue = filed.getColumnName() + " = #{" + filed.getName() + "},";
                     ifELement.addText(textValue);
 
                     ifELement.addText(CharacterConstants.NEW_LINE);
