@@ -87,6 +87,7 @@ public class TableUtils {
                 break;
             case "datetime":
             case "date":
+            case "timestamp":
                 javaType = "Date";
                 break;
             case "char":

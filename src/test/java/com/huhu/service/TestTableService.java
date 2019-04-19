@@ -27,7 +27,7 @@ public class TestTableService {
 
     @Test
     public void testGetTable() {
-        Table table = tableService.getTable("customer_deregistered");
+        Table table = tableService.getTable("action_top");
         PojoClass pojoClass = TableUtils.tableToPojo(table, DO_PACKAGE);
 
         System.out.println();
