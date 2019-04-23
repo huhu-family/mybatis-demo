@@ -1,0 +1,3 @@
+package-config:
+  do-package: "me.huakai.domain.entity.customer"
+  dao-package: "me.huakai.querydao.customer"
