@@ -1,7 +1,9 @@
 package com.huhu.domain.entity;
 
 import com.huhu.constants.CharacterConstants;
+import com.huhu.constants.CommonConstants;
 import com.huhu.utils.DateUtils;
+import com.huhu.utils.FileUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -231,5 +233,12 @@ public class PojoClass {
         result.append("}").append(CharacterConstants.NEW_LINE);
 
         return result.toString();
+    }
+
+    public void writeToFile() {
+        String content = this.toString();
+
+        String fileName = this.getClassName() + this.getClassNameSuffix() + CommonConstants.FILE_SUFFIX_JAVA;
+        FileUtils.writeJavaToFile(this._package, fileName, content);
     }
 }

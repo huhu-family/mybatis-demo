@@ -1,7 +1,9 @@
 package com.huhu.service;
 
 import com.huhu.constants.CharacterConstants;
+import com.huhu.constants.CommonConstants;
 import com.huhu.domain.entity.PojoClass;
+import com.huhu.utils.FileUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -19,22 +21,18 @@ import java.io.IOException;
 @Service
 public class MapperXmlService {
 
-    /**
-     * DAO 的后缀
-     */
-    private static final String DAO_SUFFIX = "Dao";
+    public void generateMapperXmlToFile(PojoClass pojoClass, String daoPackage) {
+        Document doc = generateMapperXml(pojoClass, daoPackage);
 
-    /**
-     * DAO 的包名
-     */
-    private String daoPackage;
-
+        String fileName = pojoClass.getClassName() + CommonConstants.DAO_SUFFIX + CommonConstants.FILE_SUFFIX_XML;
+        FileUtils.writeXmlToFile(daoPackage, fileName, doc);
+    }
 
     public Document generateMapperXml(PojoClass pojoClass, String daoPackage) {
         Document mapperDoc = createMapperDoc();
 
         Element mapper = mapperDoc.addElement("mapper");
-        String daoClassName = daoPackage + "." + pojoClass.getClassName() + DAO_SUFFIX;
+        String daoClassName = daoPackage + "." + pojoClass.getClassName() + CommonConstants.DAO_SUFFIX;
         mapper.addAttribute("namespace", daoClassName);
 
         mapper.addText(CharacterConstants.NEW_LINE);

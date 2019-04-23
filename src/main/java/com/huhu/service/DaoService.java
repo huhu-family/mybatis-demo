@@ -1,8 +1,10 @@
 package com.huhu.service;
 
 import com.huhu.constants.CharacterConstants;
+import com.huhu.constants.CommonConstants;
 import com.huhu.domain.entity.PojoClass;
 import com.huhu.utils.DateUtils;
+import com.huhu.utils.FileUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -15,13 +17,10 @@ import java.util.Set;
 @Service
 public class DaoService {
 
-    /**
-     * DO 的后缀
-     */
-    private static final String DAO_SUFFIX = "Dao";
+
 
     public DaoService() {
-        this(DAO_SUFFIX);
+        this(CommonConstants.DAO_SUFFIX);
     }
 
     public DaoService(String classNameSuffix) {
@@ -41,6 +40,14 @@ public class DaoService {
      * Java Dao 后缀
      */
     private String classNameSuffix;
+
+    public void generateDaoInterfaceToFile(PojoClass pojoClass, String daoPackage) {
+        String content = generateDaoInterface(pojoClass, daoPackage);
+
+        String fileName = pojoClass.getClassName() + this.classNameSuffix + CommonConstants.FILE_SUFFIX_JAVA;
+        FileUtils.writeJavaToFile(daoPackage, fileName, content);
+
+    }
 
     public String generateDaoInterface(PojoClass pojoClass, String daoPackage) {
         StringBuilder result = new StringBuilder();

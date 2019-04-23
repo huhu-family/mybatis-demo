@@ -1,5 +1,6 @@
 package com.huhu.utils;
 
+import com.huhu.constants.CommonConstants;
 import com.huhu.domain.entity.PojoClass;
 import com.huhu.domain.entity.Table;
 
@@ -11,19 +12,18 @@ import java.util.Date;
  */
 public class TableUtils {
 
-    /**
-     * 用户名
-     */
-    private static final String USER_NAME = "wilimm";
+    public static void writePojoToFile(PojoClass pojoClass) {
 
-    public static PojoClass tableToPojo(Table table, String doPackage) {
+    }
+
+    public static PojoClass generatePojo(Table table, String doPackage) {
         PojoClass pojoClass = new PojoClass();
         pojoClass.set_package(doPackage);
         pojoClass.setClassName(underlineToBigCamelCase(table.getName()));
         pojoClass.setTableName(table.getName());
 
 
-        PojoClass.ClassComment classComment = new PojoClass.ClassComment(table.getComment(), USER_NAME, new Date());
+        PojoClass.ClassComment classComment = new PojoClass.ClassComment(table.getComment(), CommonConstants.USER_NAME, new Date());
         pojoClass.setComment(classComment);
 
         for (Table.Column column : table.getColumnList()) {

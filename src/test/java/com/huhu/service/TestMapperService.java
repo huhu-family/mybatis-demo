@@ -2,6 +2,7 @@ package com.huhu.service;
 
 import com.huhu.domain.entity.PojoClass;
 import com.huhu.domain.entity.Table;
+import com.huhu.init.InitParameters;
 import com.huhu.utils.TableUtils;
 import org.dom4j.Document;
 import org.junit.Test;
@@ -20,16 +21,8 @@ import java.io.IOException;
 @SpringBootTest
 public class TestMapperService {
 
-    /**
-     * DO 所在的包
-     */
-    private static final String DO_PACKAGE = "me.huakai.dao.entity.wallet";
-
-    /**
-     * Dao 所在的包
-     */
-    private static final String DAO_PACKAGE = "me.huakai.dao.mysql.wallet";
-
+    @Autowired
+    private InitParameters initParameters;
     @Autowired
     private TableService tableService;
     @Autowired
@@ -38,13 +31,13 @@ public class TestMapperService {
     @Test
     public void test() throws IOException {
         Table table = tableService.getTable("withdraw_ext");
-        PojoClass pojoClass = TableUtils.tableToPojo(table, DO_PACKAGE);
+        PojoClass pojoClass = TableUtils.generatePojo(table, initParameters.getDoPackage());
 
         System.out.println();
         System.out.println();
         System.out.println();
 
-        Document document = mapperXmlService.generateMapperXml(pojoClass, DAO_PACKAGE);
+        Document document = mapperXmlService.generateMapperXml(pojoClass, initParameters.getDaoPackage());
         mapperXmlService.printDoc(document);
 
         System.out.println();

@@ -2,6 +2,7 @@ package com.huhu.service;
 
 import com.huhu.domain.entity.PojoClass;
 import com.huhu.domain.entity.Table;
+import com.huhu.init.InitParameters;
 import com.huhu.utils.TableUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,18 +18,15 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @SpringBootTest
 public class TestTableService {
 
-    /**
-     * DO 所在的包
-     */
-    private static final String DO_PACKAGE = "com.huhu.domain.entity";
-
+    @Autowired
+    private InitParameters initParameters;
     @Autowired
     private TableService tableService;
 
     @Test
     public void testGetTable() {
-        Table table = tableService.getTable("action_top");
-        PojoClass pojoClass = TableUtils.tableToPojo(table, DO_PACKAGE);
+        Table table = tableService.getTable("customer_juvenile_mode");
+        PojoClass pojoClass = TableUtils.generatePojo(table, initParameters.getDoPackage());
 
         System.out.println();
         System.out.println();
