@@ -38,12 +38,23 @@ public class TableService {
 
             table.setName(tableName);
 
-            for (int i = 1; i < lines.length; i ++) {
+            // 不遍历最后一行
+            for (int i = 1; i < lines.length - 1; i ++) {
                 String[] columnSQL = lines[i].trim().split("\\s+");
-                // 如果到了 PRIMARY 行，说明列已经遍历完了
-                if ("PRIMARY".equalsIgnoreCase(columnSQL[0])) {
-                    break;
+
+                if ("PRIMARY".equalsIgnoreCase(columnSQL[0])
+                        || "KEY".equalsIgnoreCase(columnSQL[0])) {
+                    continue;
                 }
+
+                // UNIQUE KEY `uniq_customer_id` (`customer_id`),
+                if ("UNIQUE".equalsIgnoreCase(columnSQL[0])
+                        && "uniq_customer_id".equalsIgnoreCase(columnSQL[2].substring(1, columnSQL[2].length() - 1))) {
+                    table.setUniqueCustomerId(true);
+                    continue;
+                }
+
+
 
                 Table.Column column = new Table.Column();
                 String columnName = columnSQL[0].replaceAll("`", "");
@@ -78,6 +89,7 @@ public class TableService {
                 }
 
                 table.addColumn(column);
+
             }
             String lastLine = lines[lines.length - 1];
             // 去掉前面的 =' 符号，以及后面的' 符号

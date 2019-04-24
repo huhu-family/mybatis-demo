@@ -25,4 +25,14 @@ public class InitParameters {
      */
     String daoPackage;
 
+    /**
+     * Java 文件所在的路径
+     */
+    String javaSrcPath;
+
+    /**
+     * xml 文件所在的路径
+     */
+    String xmlPath;
+
 }

@@ -12,15 +12,11 @@ import java.util.Date;
  */
 public class TableUtils {
 
-    public static void writePojoToFile(PojoClass pojoClass) {
-
-    }
-
     public static PojoClass generatePojo(Table table, String doPackage) {
         PojoClass pojoClass = new PojoClass();
         pojoClass.set_package(doPackage);
         pojoClass.setClassName(underlineToBigCamelCase(table.getName()));
-        pojoClass.setTableName(table.getName());
+        pojoClass.setTable(table);
 
 
         PojoClass.ClassComment classComment = new PojoClass.ClassComment(table.getComment(), CommonConstants.USER_NAME, new Date());

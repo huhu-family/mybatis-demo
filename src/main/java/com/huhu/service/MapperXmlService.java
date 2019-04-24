@@ -1,6 +1,6 @@
 package com.huhu.service;
 
-import com.huhu.constants.CharacterConstants;
+import com.huhu.constants.StringConstants;
 import com.huhu.constants.CommonConstants;
 import com.huhu.domain.entity.PojoClass;
 import com.huhu.utils.FileUtils;
@@ -10,6 +10,7 @@ import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 import org.dom4j.tree.DefaultDocumentType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -21,11 +22,14 @@ import java.io.IOException;
 @Service
 public class MapperXmlService {
 
+    @Autowired
+    private FileUtils fileUtils;
+
     public void generateMapperXmlToFile(PojoClass pojoClass, String daoPackage) {
         Document doc = generateMapperXml(pojoClass, daoPackage);
 
         String fileName = pojoClass.getClassName() + CommonConstants.DAO_SUFFIX + CommonConstants.FILE_SUFFIX_XML;
-        FileUtils.writeXmlToFile(daoPackage, fileName, doc);
+        fileUtils.writeXmlToFile(fileName, doc);
     }
 
     public Document generateMapperXml(PojoClass pojoClass, String daoPackage) {
@@ -35,39 +39,47 @@ public class MapperXmlService {
         String daoClassName = daoPackage + "." + pojoClass.getClassName() + CommonConstants.DAO_SUFFIX;
         mapper.addAttribute("namespace", daoClassName);
 
-        mapper.addText(CharacterConstants.NEW_LINE);
+        mapper.addText(StringConstants.NEW_LINE);
         mapper.addText(" ");
 
         // 1. 填充 resultMap 节点
         fillResultMap(pojoClass, mapper);
 
-        mapper.addText(CharacterConstants.NEW_LINE);
+        mapper.addText(StringConstants.NEW_LINE);
         mapper.addText(" ");
 
 
         // 2. 填充 sql 节点
         fillSql(pojoClass, mapper);
 
-        mapper.addText(CharacterConstants.NEW_LINE);
+        mapper.addText(StringConstants.NEW_LINE);
         mapper.addText(" ");
 
         // 3. 填充 insert save 节点
         fillInsertSave(pojoClass, mapper);
 
-        mapper.addText(CharacterConstants.NEW_LINE);
+        mapper.addText(StringConstants.NEW_LINE);
         mapper.addText(" ");
 
         // 4. 填充 insert saveOrUpdate 节点
         fillInsertSaveOrUpdate(pojoClass, mapper);
 
-        mapper.addText(CharacterConstants.NEW_LINE);
+        mapper.addText(StringConstants.NEW_LINE);
         mapper.addText(" ");
 
         // 4. 填充 select findById 节点
         fillSelectFindById(pojoClass, mapper);
 
-        mapper.addText(CharacterConstants.NEW_LINE);
+        mapper.addText(StringConstants.NEW_LINE);
         mapper.addText(" ");
+
+        if (pojoClass.getTable().isUniqueCustomerId()) {
+            // 填充 select findByCustomerId 节点
+            fillSelectFindByCustomerId(pojoClass, mapper);
+
+            mapper.addText(StringConstants.NEW_LINE);
+            mapper.addText(" ");
+        }
 
         // 5. 填充 update updateByPrimaryKeySelective 节点
         fillUpdateByPrimaryKeySelective(pojoClass, mapper);
@@ -81,25 +93,29 @@ public class MapperXmlService {
         updateByPrimaryKeySelective.addAttribute("id", "updateByPrimaryKeySelective");
         updateByPrimaryKeySelective.addAttribute("parameterType", pojoClass.fullClassName());
 
-        updateByPrimaryKeySelective.addText(CharacterConstants.NEW_LINE);
-        updateByPrimaryKeySelective.addText(CharacterConstants.TAB);
-        updateByPrimaryKeySelective.addText(CharacterConstants.TAB);
+        updateByPrimaryKeySelective.addText(StringConstants.NEW_LINE);
+        updateByPrimaryKeySelective.addText(StringConstants.TAB);
+        updateByPrimaryKeySelective.addText(StringConstants.TAB);
 
         updateByPrimaryKeySelective.addText("UPDATE ");
-        updateByPrimaryKeySelective.addText(pojoClass.getTableName());
+        updateByPrimaryKeySelective.addText(pojoClass.getTable().getName());
 
         Element set = updateByPrimaryKeySelective.addElement("set");
 
         pojoClass.getFieldList().stream()
                 .filter(filed -> !filed.getName().equals("id"))
+                .filter(filed ->
+                        !(filed.getColumnName().equalsIgnoreCase("update_time")
+                                || filed.getColumnName().equalsIgnoreCase("create_time"))
+                )
                 .forEach(filed -> {
                     Element ifELement = set.addElement("if");
 
-                    ifELement.addText(CharacterConstants.NEW_LINE);
-                    ifELement.addText(CharacterConstants.TAB);
-                    ifELement.addText(CharacterConstants.TAB);
-                    ifELement.addText(CharacterConstants.TAB);
-                    ifELement.addText(CharacterConstants.TAB);
+                    ifELement.addText(StringConstants.NEW_LINE);
+                    ifELement.addText(StringConstants.TAB);
+                    ifELement.addText(StringConstants.TAB);
+                    ifELement.addText(StringConstants.TAB);
+                    ifELement.addText(StringConstants.TAB);
 
                     String testValue = filed.getName() + " != null";
                     ifELement.addAttribute("test", testValue);
@@ -107,16 +123,16 @@ public class MapperXmlService {
                     String textValue = filed.getColumnName() + " = #{" + filed.getName() + "},";
                     ifELement.addText(textValue);
 
-                    ifELement.addText(CharacterConstants.NEW_LINE);
-                    ifELement.addText(CharacterConstants.TAB);
-                    ifELement.addText(CharacterConstants.TAB);
-                    ifELement.addText(CharacterConstants.TAB);
+                    ifELement.addText(StringConstants.NEW_LINE);
+                    ifELement.addText(StringConstants.TAB);
+                    ifELement.addText(StringConstants.TAB);
+                    ifELement.addText(StringConstants.TAB);
 
                 });
 
-        updateByPrimaryKeySelective.addText(CharacterConstants.NEW_LINE);
-        updateByPrimaryKeySelective.addText(CharacterConstants.TAB);
-        updateByPrimaryKeySelective.addText(CharacterConstants.TAB);
+        updateByPrimaryKeySelective.addText(StringConstants.NEW_LINE);
+        updateByPrimaryKeySelective.addText(StringConstants.TAB);
+        updateByPrimaryKeySelective.addText(StringConstants.TAB);
 
         updateByPrimaryKeySelective.addText(" WHERE ")
                 .addText("id=#{id}");
@@ -127,22 +143,45 @@ public class MapperXmlService {
         selectFindById.addAttribute("id", "findById");
         selectFindById.addAttribute("resultMap", "BaseResultMap");
 
-        selectFindById.addText(CharacterConstants.NEW_LINE);
-        selectFindById.addText(CharacterConstants.TAB);
-        selectFindById.addText(CharacterConstants.TAB);
+        selectFindById.addText(StringConstants.NEW_LINE);
+        selectFindById.addText(StringConstants.TAB);
+        selectFindById.addText(StringConstants.TAB);
 
         selectFindById.addText("SELECT ");
         Element include = selectFindById.addElement("include");
         include.addAttribute("refid", "Base_Column_List");
 
-        selectFindById.addText(CharacterConstants.NEW_LINE);
-        selectFindById.addText(CharacterConstants.TAB);
-        selectFindById.addText(CharacterConstants.TAB);
+        selectFindById.addText(StringConstants.NEW_LINE);
+        selectFindById.addText(StringConstants.TAB);
+        selectFindById.addText(StringConstants.TAB);
 
         selectFindById.addText("FROM ")
-                .addText(pojoClass.getTableName())
+                .addText(pojoClass.getTable().getName())
                 .addText(" WHERE ")
                 .addText("id=#{id}");
+    }
+
+    private void fillSelectFindByCustomerId(PojoClass pojoClass, Element mapper) {
+        Element selectFindByCustomerId = mapper.addElement("select");
+        selectFindByCustomerId.addAttribute("id", "findByCustomerId");
+        selectFindByCustomerId.addAttribute("resultMap", "BaseResultMap");
+
+        selectFindByCustomerId.addText(StringConstants.NEW_LINE);
+        selectFindByCustomerId.addText(StringConstants.TAB);
+        selectFindByCustomerId.addText(StringConstants.TAB);
+
+        selectFindByCustomerId.addText("SELECT ");
+        Element include = selectFindByCustomerId.addElement("include");
+        include.addAttribute("refid", "Base_Column_List");
+
+        selectFindByCustomerId.addText(StringConstants.NEW_LINE);
+        selectFindByCustomerId.addText(StringConstants.TAB);
+        selectFindByCustomerId.addText(StringConstants.TAB);
+
+        selectFindByCustomerId.addText("FROM ")
+                .addText(pojoClass.getTable().getName())
+                .addText(" WHERE ")
+                .addText("customer_id=#{customerId}");
     }
 
     private void fillInsertSaveOrUpdate(PojoClass pojoClass, Element mapper) {
@@ -154,16 +193,20 @@ public class MapperXmlService {
 
         StringBuilder duplicateKeyUpdateSql = new StringBuilder();
 
-        duplicateKeyUpdateSql.append(CharacterConstants.NEW_LINE)
-                .append(CharacterConstants.TAB)
-                .append(CharacterConstants.TAB)
+        duplicateKeyUpdateSql.append(StringConstants.NEW_LINE)
+                .append(StringConstants.TAB)
+                .append(StringConstants.TAB)
                 .append("ON DUPLICATE KEY UPDATE")
-                .append(CharacterConstants.NEW_LINE)
-                .append(CharacterConstants.TAB)
-                .append(CharacterConstants.TAB);
+                .append(StringConstants.NEW_LINE)
+                .append(StringConstants.TAB)
+                .append(StringConstants.TAB);
 
         pojoClass.getFieldList().stream()
                 .filter(filed -> !filed.getName().equals("id"))
+                .filter(filed ->
+                        !(filed.getColumnName().equalsIgnoreCase("update_time")
+                                || filed.getColumnName().equalsIgnoreCase("create_time"))
+                )
                 .forEach(filed -> {
                     duplicateKeyUpdateSql.append(filed.getColumnName())
                             .append(" = ")
@@ -193,7 +236,7 @@ public class MapperXmlService {
         StringBuilder sql = new StringBuilder();
         sql.append("INSERT INTO")
                 .append(" ")
-                .append(pojoClass.getTableName())
+                .append(pojoClass.getTable().getName())
                 .append("(");
 
         StringBuilder columns = new StringBuilder();
@@ -201,6 +244,10 @@ public class MapperXmlService {
 
         pojoClass.getFieldList().stream()
                 .filter(filed -> includeId || !filed.getName().equals("id"))
+                .filter(filed ->
+                        !(filed.getColumnName().equalsIgnoreCase("update_time")
+                        || filed.getColumnName().equalsIgnoreCase("create_time"))
+                )
                 .forEach(filed -> {
                     columns.append(filed.getColumnName()).append(", ");
 
@@ -230,14 +277,14 @@ public class MapperXmlService {
     }
 
     private void addText(Element element, String text) {
-        element.addText(CharacterConstants.NEW_LINE);
-        element.addText(CharacterConstants.TAB);
-        element.addText(CharacterConstants.TAB);
+        element.addText(StringConstants.NEW_LINE);
+        element.addText(StringConstants.TAB);
+        element.addText(StringConstants.TAB);
 
         element.addText(text);
 
-        element.addText(CharacterConstants.NEW_LINE);
-        element.addText(CharacterConstants.TAB);
+        element.addText(StringConstants.NEW_LINE);
+        element.addText(StringConstants.TAB);
     }
 
 

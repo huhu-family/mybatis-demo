@@ -6,7 +6,7 @@ package com.huhu.constants;
  * @Author: wilimm
  * @Date: 2019/1/14 18:11
  */
-public interface CharacterConstants {
+public interface StringConstants {
 
     /**
      * 换行符
@@ -17,4 +17,14 @@ public interface CharacterConstants {
      * tab 键
      */
     String TAB = "\t";
+
+    /**
+     * 空字符串
+     */
+    String EMPTY = "";
+
+    /**
+     * 文件分隔符
+     */
+    String FILE_SEPARATOR = "/";
 }

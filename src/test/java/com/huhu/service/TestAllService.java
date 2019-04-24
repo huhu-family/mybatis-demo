@@ -3,6 +3,7 @@ package com.huhu.service;
 import com.huhu.domain.entity.PojoClass;
 import com.huhu.domain.entity.Table;
 import com.huhu.init.InitParameters;
+import com.huhu.utils.FileUtils;
 import com.huhu.utils.TableUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,18 +29,21 @@ public class TestAllService {
     private MapperXmlService mapperXmlService;
     @Autowired
     private DaoService daoService;
+    @Autowired
+    private FileUtils fileUtils;
 
 
     @Test
     public void test() throws IOException {
         Table table = tableService.getTable("customer_juvenile_mode");
+
         PojoClass pojoClass = TableUtils.generatePojo(table, initParameters.getDoPackage());
 
         System.out.println();
         System.out.println();
         System.out.println();
 
-        pojoClass.writeToFile();
+        pojoClass.writeToFile(fileUtils);
 
         System.out.println();
         System.out.println();

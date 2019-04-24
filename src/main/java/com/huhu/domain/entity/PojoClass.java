@@ -1,6 +1,6 @@
 package com.huhu.domain.entity;
 
-import com.huhu.constants.CharacterConstants;
+import com.huhu.constants.StringConstants;
 import com.huhu.constants.CommonConstants;
 import com.huhu.utils.DateUtils;
 import com.huhu.utils.FileUtils;
@@ -72,9 +72,9 @@ public class PojoClass {
     private String classNameSuffix;
 
     /**
-     * 表名
+     * POJO 对应的数据库表
      */
-    private String tableName;
+    private Table table;
 
     /**
      * serialVersionUID 使用默认值 1L
@@ -146,46 +146,46 @@ public class PojoClass {
         StringBuilder result = new StringBuilder();
         result.append("package ").append(_package).append(";");
 
-        result.append(CharacterConstants.NEW_LINE);
-        result.append(CharacterConstants.NEW_LINE);
+        result.append(StringConstants.NEW_LINE);
+        result.append(StringConstants.NEW_LINE);
 
         for (String _import : importList) {
-            result.append("import ").append(_import).append(CharacterConstants.NEW_LINE);
+            result.append("import ").append(_import).append(StringConstants.NEW_LINE);
         }
 
-        result.append(CharacterConstants.NEW_LINE);
+        result.append(StringConstants.NEW_LINE);
 
-        result.append("/**").append(CharacterConstants.NEW_LINE)
-                .append(" * ").append(comment.getComment()).append(CharacterConstants.NEW_LINE)
-                .append(" * ").append(CharacterConstants.NEW_LINE)
-                .append(" * @Author: ").append(comment.getUser()).append(CharacterConstants.NEW_LINE)
-                .append(" * @Date: ").append(DateUtils.format(comment.getCreateTime())).append(CharacterConstants.NEW_LINE)
-                .append(" */").append(CharacterConstants.NEW_LINE);
+        result.append("/**").append(StringConstants.NEW_LINE)
+                .append(" * ").append(comment.getComment()).append(StringConstants.NEW_LINE)
+                .append(" * ").append(StringConstants.NEW_LINE)
+                .append(" * @Author: ").append(comment.getUser()).append(StringConstants.NEW_LINE)
+                .append(" * @Date: ").append(DateUtils.format(comment.getCreateTime())).append(StringConstants.NEW_LINE)
+                .append(" */").append(StringConstants.NEW_LINE);
 
         // 默认的注解
-        result.append("@Data").append(CharacterConstants.NEW_LINE);
+        result.append("@Data").append(StringConstants.NEW_LINE);
 
         result.append("public class ").append(className).append(classNameSuffix).append(" implements Serializable ")
-                .append(" {").append(CharacterConstants.NEW_LINE);
+                .append(" {").append(StringConstants.NEW_LINE);
 
-        result.append(CharacterConstants.NEW_LINE);
+        result.append(StringConstants.NEW_LINE);
 
-        result.append(CharacterConstants.TAB).append("private static final long serialVersionUID = ")
-                .append(serialVersionUID).append(";").append(CharacterConstants.NEW_LINE);
+        result.append(StringConstants.TAB).append("private static final long serialVersionUID = ")
+                .append(serialVersionUID).append(";").append(StringConstants.NEW_LINE);
 
         for (Field field : fieldList) {
-            result.append(CharacterConstants.NEW_LINE);
+            result.append(StringConstants.NEW_LINE);
 
-            result.append(CharacterConstants.TAB).append("/**").append(CharacterConstants.NEW_LINE)
-                    .append(CharacterConstants.TAB).append(" * ").append(field.getComment()).append(CharacterConstants.NEW_LINE)
-                    .append(CharacterConstants.TAB).append(" */").append(CharacterConstants.NEW_LINE);
+            result.append(StringConstants.TAB).append("/**").append(StringConstants.NEW_LINE)
+                    .append(StringConstants.TAB).append(" * ").append(field.getComment()).append(StringConstants.NEW_LINE)
+                    .append(StringConstants.TAB).append(" */").append(StringConstants.NEW_LINE);
 
-            result.append(CharacterConstants.TAB).append("private ")
+            result.append(StringConstants.TAB).append("private ")
                     .append(field.getType()).append(" ").append(field.getName())
-                    .append(";").append(CharacterConstants.NEW_LINE);
+                    .append(";").append(StringConstants.NEW_LINE);
         }
 
-        result.append("}").append(CharacterConstants.NEW_LINE);
+        result.append("}").append(StringConstants.NEW_LINE);
 
         return result.toString();
     }
@@ -194,51 +194,51 @@ public class PojoClass {
         StringBuilder result = new StringBuilder();
         result.append("package ").append(_package).append(";");
 
-        result.append(CharacterConstants.NEW_LINE);
-        result.append(CharacterConstants.NEW_LINE);
+        result.append(StringConstants.NEW_LINE);
+        result.append(StringConstants.NEW_LINE);
 
-        result.append("import lombok.Data;").append(CharacterConstants.NEW_LINE);
-        result.append("import io.swagger.annotations.ApiModelProperty;").append(CharacterConstants.NEW_LINE);
-        result.append("import java.util.Date;").append(CharacterConstants.NEW_LINE);
+        result.append("import lombok.Data;").append(StringConstants.NEW_LINE);
+        result.append("import io.swagger.annotations.ApiModelProperty;").append(StringConstants.NEW_LINE);
+        result.append("import java.util.Date;").append(StringConstants.NEW_LINE);
 
 
 
-        result.append(CharacterConstants.NEW_LINE);
+        result.append(StringConstants.NEW_LINE);
 
-        result.append("/**").append(CharacterConstants.NEW_LINE)
-                .append(" * @Author: ").append(comment.getUser()).append(CharacterConstants.NEW_LINE)
-                .append(" * @Date: ").append(DateUtils.format(comment.getCreateTime())).append(CharacterConstants.NEW_LINE)
-                .append(" */").append(CharacterConstants.NEW_LINE);
+        result.append("/**").append(StringConstants.NEW_LINE)
+                .append(" * @Author: ").append(comment.getUser()).append(StringConstants.NEW_LINE)
+                .append(" * @Date: ").append(DateUtils.format(comment.getCreateTime())).append(StringConstants.NEW_LINE)
+                .append(" */").append(StringConstants.NEW_LINE);
 
         // 默认的注解
-        result.append("@Data").append(CharacterConstants.NEW_LINE);
+        result.append("@Data").append(StringConstants.NEW_LINE);
 
         result.append("public class ").append(className).append(DTO_SUFFIX)
-                .append(" {").append(CharacterConstants.NEW_LINE);
+                .append(" {").append(StringConstants.NEW_LINE);
 
         for (Field field : fieldList) {
-            result.append(CharacterConstants.NEW_LINE);
+            result.append(StringConstants.NEW_LINE);
 
-            result.append(CharacterConstants.TAB)
+            result.append(StringConstants.TAB)
                     .append("@ApiModelProperty(")
                     .append("\"").append(field.getComment()).append("\"")
                     .append(")")
-                    .append(CharacterConstants.NEW_LINE);
+                    .append(StringConstants.NEW_LINE);
 
-            result.append(CharacterConstants.TAB).append("private ")
+            result.append(StringConstants.TAB).append("private ")
                     .append(field.getType()).append(" ").append(field.getName())
-                    .append(";").append(CharacterConstants.NEW_LINE);
+                    .append(";").append(StringConstants.NEW_LINE);
         }
 
-        result.append("}").append(CharacterConstants.NEW_LINE);
+        result.append("}").append(StringConstants.NEW_LINE);
 
         return result.toString();
     }
 
-    public void writeToFile() {
+    public void writeToFile(FileUtils fileUtils) {
         String content = this.toString();
 
         String fileName = this.getClassName() + this.getClassNameSuffix() + CommonConstants.FILE_SUFFIX_JAVA;
-        FileUtils.writeJavaToFile(this._package, fileName, content);
+        fileUtils.writeJavaToFile(this._package, fileName, content);
     }
 }

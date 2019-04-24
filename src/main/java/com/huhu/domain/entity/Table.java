@@ -27,6 +27,11 @@ public class Table {
     private String createTableSQL;
 
     /**
+     * customer_id 是否是唯一键
+     */
+    private boolean uniqueCustomerId;
+
+    /**
      * 列集合
      */
     private List<Column> columnList = new ArrayList<>();

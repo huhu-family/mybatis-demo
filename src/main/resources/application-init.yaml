@@ -1,3 +1,5 @@
 package-config:
-  do-package: "me.huakai.domain.entity.customer"
-  dao-package: "me.huakai.querydao.customer"
+  do-package: "me.huakai.domain.entity"
+  dao-package: "me.huakai.querydao"
+  java-src-path: "C:\\Users\\wilimm\\Desktop\\demo\\"
+  xml-path: "C:\\Users\\wilimm\\Desktop\\demo\\"
