@@ -35,7 +35,7 @@ public class TestAllService {
 
     @Test
     public void test() throws IOException {
-        Table table = tableService.getTable("customer_juvenile_mode");
+        Table table = tableService.getTable("customer_current_location");
 
         PojoClass pojoClass = TableUtils.generatePojo(table, initParameters.getDoPackage());
 
