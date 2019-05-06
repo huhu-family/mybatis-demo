@@ -5,6 +5,7 @@ import com.huhu.constants.CommonConstants;
 import com.huhu.domain.entity.PojoClass;
 import com.huhu.utils.DateUtils;
 import com.huhu.utils.FileUtils;
+import com.huhu.utils.TableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,10 +36,12 @@ public class DaoService {
 
 
     public void generateDaoInterfaceToFile(PojoClass pojoClass, String daoPackage) {
-        String content = generateDaoInterface(pojoClass, daoPackage);
+        String packageName = daoPackage + "." + TableUtils.firstSubPackage(pojoClass.getTable().getName());
+
+        String content = generateDaoInterface(pojoClass, packageName);
 
         String fileName = pojoClass.getClassName() + CommonConstants.DAO_SUFFIX + CommonConstants.FILE_SUFFIX_JAVA;
-        fileUtils.writeJavaToFile(daoPackage, fileName, content);
+        fileUtils.writeJavaToFile(packageName, fileName, content);
 
     }
 

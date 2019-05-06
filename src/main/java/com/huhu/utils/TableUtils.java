@@ -1,6 +1,7 @@
 package com.huhu.utils;
 
 import com.huhu.constants.CommonConstants;
+import com.huhu.constants.StringConstants;
 import com.huhu.domain.entity.PojoClass;
 import com.huhu.domain.entity.Table;
 
@@ -12,9 +13,25 @@ import java.util.Date;
  */
 public class TableUtils {
 
+    /**
+     * 通过表名获取子包，比如 customer_current_location，则子包为 customer
+     * @param tableName
+     * @return
+     */
+    public static String firstSubPackage(String tableName) {
+        for (int i = 1; i < tableName.length(); i ++) {
+            if (tableName.charAt(i) == '_') {
+                return tableName.substring(0, i).toLowerCase();
+            }
+        }
+        return StringConstants.EMPTY;
+    }
+
     public static PojoClass generatePojo(Table table, String doPackage) {
+        String packageName = doPackage + "." + firstSubPackage(table.getName());
+
         PojoClass pojoClass = new PojoClass();
-        pojoClass.set_package(doPackage);
+        pojoClass.set_package(packageName);
         pojoClass.setClassName(underlineToBigCamelCase(table.getName()));
         pojoClass.setTable(table);
 

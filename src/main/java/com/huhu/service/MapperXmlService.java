@@ -1,9 +1,10 @@
 package com.huhu.service;
 
-import com.huhu.constants.StringConstants;
 import com.huhu.constants.CommonConstants;
+import com.huhu.constants.StringConstants;
 import com.huhu.domain.entity.PojoClass;
 import com.huhu.utils.FileUtils;
+import com.huhu.utils.TableUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -26,10 +27,13 @@ public class MapperXmlService {
     private FileUtils fileUtils;
 
     public void generateMapperXmlToFile(PojoClass pojoClass, String daoPackage) {
-        Document doc = generateMapperXml(pojoClass, daoPackage);
+        String subDir = TableUtils.firstSubPackage(pojoClass.getTable().getName());
+        String packageName = daoPackage + "." + subDir;
+
+        Document doc = generateMapperXml(pojoClass, packageName);
 
         String fileName = pojoClass.getClassName() + CommonConstants.DAO_SUFFIX + CommonConstants.FILE_SUFFIX_XML;
-        fileUtils.writeXmlToFile(fileName, doc);
+        fileUtils.writeXmlToFile(fileName, subDir, doc);
     }
 
     public Document generateMapperXml(PojoClass pojoClass, String daoPackage) {

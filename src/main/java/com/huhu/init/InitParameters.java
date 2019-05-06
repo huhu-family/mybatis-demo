@@ -26,12 +26,12 @@ public class InitParameters {
     String daoPackage;
 
     /**
-     * Java 文件所在的路径
+     * Java 文件所在的根目录，Maven 项目通常为项目根目录的 src\main\java 子目录
      */
     String javaSrcPath;
 
     /**
-     * xml 文件所在的路径
+     * xml 文件所在的路径，项目中存放 MyBatis XML 文件的目录
      */
     String xmlPath;
 

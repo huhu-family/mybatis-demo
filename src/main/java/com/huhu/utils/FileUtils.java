@@ -31,18 +31,9 @@ public class FileUtils {
         return packageName.replaceAll("\\.", StringConstants.FILE_SEPARATOR);
     }
 
-    private static String getFirstSubPackage(String fileName) {
-        for (int i = 1; i < fileName.length(); i ++) {
-            if (Character.isUpperCase(fileName.charAt(i))) {
-                return fileName.substring(0, i).toLowerCase();
-            }
-        }
-        return StringConstants.EMPTY;
-    }
-
     public void writeJavaToFile(String packageName, String fileName, String content) {
-        String dirPathName = initParameters.getJavaSrcPath() + package2Path(packageName)
-                + StringConstants.FILE_SEPARATOR + getFirstSubPackage(fileName);
+        String dirPathName = initParameters.getJavaSrcPath() + StringConstants.FILE_SEPARATOR
+                + package2Path(packageName);
 
         // System.out.println(dirPathName);
 
@@ -64,17 +55,26 @@ public class FileUtils {
         }
     }
 
-    public void writeXmlToFile(String fileName, Document doc) {
+    public void writeXmlToFile(String fileName, String subDir, Document doc) {
         OutputFormat format = OutputFormat.createPrettyPrint();
         // 设置 text 中是否要删除其中多余的空格
         format.setTrimText(false);
         format.setIndentSize(4);
 
-        // 目录会在 dao 中生成，所以这里不需要额外处理
-        String path = initParameters.getJavaSrcPath() + "/" + fileName;
+
+        String dirPathName = initParameters.getXmlPath() + StringConstants.FILE_SEPARATOR + subDir;
+
+        Path dirPath = Paths.get(dirPathName);
 
         XMLWriter writer = null;
         try {
+            if (!Files.exists(dirPath)) {
+                Files.createDirectories(dirPath);
+            }
+
+            String path = dirPathName + StringConstants.FILE_SEPARATOR + fileName;
+
+
             OutputStream fileOutputStream = new FileOutputStream(path);
             writer = new XMLWriter(fileOutputStream, format);
             writer.write(doc);

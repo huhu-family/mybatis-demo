@@ -5,7 +5,6 @@ import com.huhu.domain.entity.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -50,7 +49,6 @@ public class TableService {
 
                 // UNIQUE KEY `uniq_customer_id` (`customer_id`),
                 if ("UNIQUE".equalsIgnoreCase(columnSQL[0])) {
-                    Arrays.stream(columnSQL).forEach(System.out::println);
                     if ("(`customer_id`)".equalsIgnoreCase(columnSQL[3].substring(0, columnSQL[3].length() - 1))) {
                         table.setUniqueCustomerId(true);
                     }
