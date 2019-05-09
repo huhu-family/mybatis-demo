@@ -71,7 +71,13 @@ public class MapperXmlService {
         mapper.addText(StringConstants.NEW_LINE);
         mapper.addText(" ");
 
-        // 4. 填充 select findById 节点
+        // 5. 填充 insert save 节点
+        fillInsertSelective(pojoClass, mapper);
+
+        mapper.addText(StringConstants.NEW_LINE);
+        mapper.addText(" ");
+
+        // 6. 填充 select findById 节点
         fillSelectFindById(pojoClass, mapper);
 
         mapper.addText(StringConstants.NEW_LINE);
@@ -85,11 +91,27 @@ public class MapperXmlService {
             mapper.addText(" ");
         }
 
-        // 5. 填充 update updateByPrimaryKeySelective 节点
+        // 7. 填充 update updateByPrimaryKeySelective 节点
         fillUpdateByPrimaryKeySelective(pojoClass, mapper);
+
+        mapper.addText(StringConstants.NEW_LINE);
+        mapper.addText(" ");
+
+        // 8. 填充 delete deleteById 节点
+        fillDeleteById(pojoClass, mapper);
 
 
         return mapperDoc;
+    }
+
+    private void fillDeleteById(PojoClass pojoClass, Element mapper) {
+        Element deleteById = mapper.addElement("delete");
+        deleteById.addAttribute("id", "deleteById");
+
+        String deleteByIdSQL = "DELETE FROM " + pojoClass.getTable().getName()
+                + " WHERE id=#{id}";
+
+        addText(deleteById, deleteByIdSQL);
     }
 
     private void fillUpdateByPrimaryKeySelective(PojoClass pojoClass, Element mapper) {
@@ -187,6 +209,88 @@ public class MapperXmlService {
                 .addText(" WHERE ")
                 .addText("customer_id=#{customerId}");
     }
+
+
+    private void fillInsertSelective(PojoClass pojoClass, Element mapper) {
+        Element insertSelective = mapper.addElement("insert");
+        insertSelective.addAttribute("id", "insertSelective");
+        insertSelective.addAttribute("parameterType", pojoClass.fullClassName());
+
+        insertSelective.addText(StringConstants.NEW_LINE);
+        insertSelective.addText(StringConstants.TAB);
+        insertSelective.addText(StringConstants.TAB);
+
+        insertSelective.addText("INSERT INTO ");
+        insertSelective.addText(pojoClass.getTable().getName());
+
+        Element trim = insertSelective.addElement("trim");
+        trim.addAttribute("prefix", "(");
+        trim.addAttribute("suffix", ")");
+        trim.addAttribute("suffixOverrides", ",");
+
+        pojoClass.getFieldList().stream()
+                .filter(filed -> !filed.getName().equals("id"))
+                .filter(filed ->
+                        !(filed.getColumnName().equalsIgnoreCase("update_time")
+                                || filed.getColumnName().equalsIgnoreCase("create_time"))
+                )
+                .forEach(filed -> {
+                    Element ifELement = trim.addElement("if");
+
+                    ifELement.addText(StringConstants.NEW_LINE);
+                    ifELement.addText(StringConstants.TAB);
+                    ifELement.addText(StringConstants.TAB);
+                    ifELement.addText(StringConstants.TAB);
+                    ifELement.addText(StringConstants.TAB);
+
+                    String testValue = filed.getName() + " != null";
+                    ifELement.addAttribute("test", testValue);
+
+                    String textValue = filed.getColumnName() + ",";
+                    ifELement.addText(textValue);
+
+                    ifELement.addText(StringConstants.NEW_LINE);
+                    ifELement.addText(StringConstants.TAB);
+                    ifELement.addText(StringConstants.TAB);
+                    ifELement.addText(StringConstants.TAB);
+
+                });
+
+        Element trimValue = insertSelective.addElement("trim");
+        trimValue.addAttribute("prefix", "VALUES (");
+        trimValue.addAttribute("suffix", ")");
+        trimValue.addAttribute("suffixOverrides", ",");
+
+        pojoClass.getFieldList().stream()
+                .filter(filed -> !filed.getName().equals("id"))
+                .filter(filed ->
+                        !(filed.getColumnName().equalsIgnoreCase("update_time")
+                                || filed.getColumnName().equalsIgnoreCase("create_time"))
+                )
+                .forEach(filed -> {
+                    Element ifELement = trimValue.addElement("if");
+
+                    ifELement.addText(StringConstants.NEW_LINE);
+                    ifELement.addText(StringConstants.TAB);
+                    ifELement.addText(StringConstants.TAB);
+                    ifELement.addText(StringConstants.TAB);
+                    ifELement.addText(StringConstants.TAB);
+
+                    String testValue = filed.getName() + " != null";
+                    ifELement.addAttribute("test", testValue);
+
+                    String textValue = filed.getColumnName() + " = #{" + filed.getName() + "},";
+                    ifELement.addText(textValue);
+
+                    ifELement.addText(StringConstants.NEW_LINE);
+                    ifELement.addText(StringConstants.TAB);
+                    ifELement.addText(StringConstants.TAB);
+                    ifELement.addText(StringConstants.TAB);
+
+                });
+
+    }
+
 
     private void fillInsertSaveOrUpdate(PojoClass pojoClass, Element mapper) {
         Element insertSaveOrUpdate = mapper.addElement("insert");

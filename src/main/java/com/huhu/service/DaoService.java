@@ -84,6 +84,11 @@ public class DaoService {
 
         result.append(StringConstants.NEW_LINE);
 
+        String insertSelectiveMethod = genSaveMethod(pojoClass, "insertSelective");
+        result.append(insertSelectiveMethod);
+
+        result.append(StringConstants.NEW_LINE);
+
         String findByIdMethod = genFindByIdMethod(pojoClass);
         result.append(findByIdMethod);
 
@@ -99,11 +104,17 @@ public class DaoService {
         String updateByPrimaryKeySelective = genUpdateByPrimaryKeySelective(pojoClass);
         result.append(updateByPrimaryKeySelective);
 
+        result.append(StringConstants.NEW_LINE);
+
+        String deleteById = genDeleteById();
+        result.append(deleteById);
+
 
         result.append("}").append(StringConstants.NEW_LINE);
 
         return result.toString();
     }
+
 
     private String genSaveMethod(PojoClass pojoClass, String methodName) {
         StringBuilder method = new StringBuilder();
@@ -166,6 +177,24 @@ public class DaoService {
                 .append("(")
                 .append(pojoClass.getClassName()).append(pojoClass.getClassNameSuffix())
                 .append(" entity")
+                .append(");");
+
+        method.append(StringConstants.NEW_LINE);
+
+        return method.toString();
+    }
+
+
+    private String genDeleteById() {
+        StringBuilder method = new StringBuilder();
+
+        method.append(StringConstants.TAB);
+
+        method.append("int ")
+                .append(" deleteById")
+                .append("(@Param(")
+                .append("\"id\")")
+                .append(" Long id")
                 .append(");");
 
         method.append(StringConstants.NEW_LINE);
