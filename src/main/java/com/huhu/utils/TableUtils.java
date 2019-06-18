@@ -49,6 +49,8 @@ public class TableUtils {
 
             if ("Date".equals(field.getType())) {
                 pojoClass.addImport("java.util.Date;");
+            } else if ("BigDecimal".equals(field.getType())) {
+                pojoClass.addImport("java.math.BigDecimal;");
             }
         }
 

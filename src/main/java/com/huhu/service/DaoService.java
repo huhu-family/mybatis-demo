@@ -55,6 +55,9 @@ public class DaoService {
         for (String _import : importList) {
             result.append("import ").append(_import).append(StringConstants.NEW_LINE);
         }
+        result.append("import ").append(pojoClass.fullClassName()).append(";")
+                .append(StringConstants.NEW_LINE);
+
 
         result.append(StringConstants.NEW_LINE);
 

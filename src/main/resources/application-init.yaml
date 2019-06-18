@@ -1,5 +1,5 @@
 package-config:
   do-package: "me.huakai.domain.entity"
   dao-package: "me.huakai.querydao"
-  java-src-path: D:\work\project\api\core\src\main\java
-  xml-path: D:\work\project\api\core\src\main\resources\mysql\mybatis
+  java-src-path: D:\work\project\cms\src\main\java
+  xml-path: D:\work\project\cms\src\main\resources\mysql\mybatis

@@ -14,7 +14,7 @@ public interface CommonConstants {
     String USER_NAME = "wilimm";
 
     /**
-     * DO 的后缀
+     * DAO 的后缀
      */
     String DAO_SUFFIX = "QueryDao";
 

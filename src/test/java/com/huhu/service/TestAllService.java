@@ -35,7 +35,7 @@ public class TestAllService {
 
     @Test
     public void test() throws IOException {
-        Table table = tableService.getTable("customer_collection");
+        Table table = tableService.getTable("vip_photo_pendant");
 
         PojoClass pojoClass = TableUtils.generatePojo(table, initParameters.getDoPackage());
 
