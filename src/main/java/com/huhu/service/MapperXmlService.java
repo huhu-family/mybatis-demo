@@ -279,7 +279,7 @@ public class MapperXmlService {
                     String testValue = filed.getName() + " != null";
                     ifELement.addAttribute("test", testValue);
 
-                    String textValue = filed.getColumnName() + " = #{" + filed.getName() + "},";
+                    String textValue = "#{" + filed.getName() + "},";
                     ifELement.addText(textValue);
 
                     ifELement.addText(StringConstants.NEW_LINE);
