@@ -71,13 +71,19 @@ public class MapperXmlService {
         mapper.addText(StringConstants.NEW_LINE);
         mapper.addText(" ");
 
-        // 5. 填充 insert save 节点
+        // 5. 填充 insert insertSelective 节点
         fillInsertSelective(pojoClass, mapper);
 
         mapper.addText(StringConstants.NEW_LINE);
         mapper.addText(" ");
 
-        // 6. 填充 select findById 节点
+        // 6. 填充 insert insertList 节点
+        fillInsertList(pojoClass, mapper);
+
+        mapper.addText(StringConstants.NEW_LINE);
+        mapper.addText(" ");
+
+        // 7. 填充 select findById 节点
         fillSelectFindById(pojoClass, mapper);
 
         mapper.addText(StringConstants.NEW_LINE);
@@ -91,13 +97,13 @@ public class MapperXmlService {
             mapper.addText(" ");
         }
 
-        // 7. 填充 update updateByPrimaryKeySelective 节点
+        // 8. 填充 update updateByPrimaryKeySelective 节点
         fillUpdateByPrimaryKeySelective(pojoClass, mapper);
 
         mapper.addText(StringConstants.NEW_LINE);
         mapper.addText(" ");
 
-        // 8. 填充 delete deleteById 节点
+        // 9. 填充 delete deleteById 节点
         fillDeleteById(pojoClass, mapper);
 
 
@@ -208,6 +214,60 @@ public class MapperXmlService {
                 .addText(pojoClass.getTable().getName())
                 .addText(" WHERE ")
                 .addText("customer_id=#{customerId}");
+    }
+
+    private void fillInsertList(PojoClass pojoClass, Element mapper) {
+        Element insertSelective = mapper.addElement("insert");
+        insertSelective.addAttribute("id", "insertList");
+
+        insertSelective.addText(StringConstants.NEW_LINE);
+        insertSelective.addText(StringConstants.TAB);
+        insertSelective.addText(StringConstants.TAB);
+
+        insertSelective.addText("INSERT INTO ");
+        insertSelective.addText(pojoClass.getTable().getName());
+
+        StringBuilder columns = new StringBuilder();
+        StringBuilder fields = new StringBuilder();
+
+        pojoClass.getFieldList().stream()
+                .filter(filed -> !filed.getName().equals("id"))
+                .filter(filed ->
+                        !(filed.getColumnName().equalsIgnoreCase("update_time")
+                                || filed.getColumnName().equalsIgnoreCase("create_time"))
+                )
+                .forEach(filed -> {
+                    columns.append(filed.getColumnName()).append(", ");
+
+                    fields.append("#{entity.").append(filed.getName()).append("}, ");
+                });
+
+        insertSelective.addText("(");
+        insertSelective.addText(columns.substring(0, columns.length() - 2));
+        insertSelective.addText(")");
+
+        insertSelective.addText(StringConstants.NEW_LINE);
+        insertSelective.addText(StringConstants.TAB);
+        insertSelective.addText(StringConstants.TAB);
+
+        insertSelective.addText("VALUES");
+
+        //  <foreach collection="entityList" item="entity" separator=",">
+        Element foreach = insertSelective.addElement("foreach");
+        foreach.addAttribute("collection", "entityList");
+        foreach.addAttribute("item", "entity");
+        foreach.addAttribute("separator", ",");
+
+        foreach.addText(StringConstants.NEW_LINE);
+        foreach.addText(StringConstants.TAB);
+        foreach.addText(StringConstants.TAB);
+        foreach.addText(StringConstants.TAB);
+
+        foreach.addText(fields.substring(0, fields.length() - 2));
+
+        foreach.addText(StringConstants.NEW_LINE);
+        foreach.addText(StringConstants.TAB);
+        foreach.addText(StringConstants.TAB);
     }
 
 

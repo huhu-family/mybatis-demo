@@ -92,6 +92,11 @@ public class DaoService {
 
         result.append(StringConstants.NEW_LINE);
 
+        String insertListMethod = genSaveListMethod(pojoClass, "insertList");
+        result.append(insertListMethod);
+
+        result.append(StringConstants.NEW_LINE);
+
         String findByIdMethod = genFindByIdMethod(pojoClass);
         result.append(findByIdMethod);
 
@@ -129,6 +134,26 @@ public class DaoService {
                 .append("(")
                 .append(pojoClass.getClassName()).append(pojoClass.getClassNameSuffix())
                 .append(" entity")
+                .append(");");
+
+        method.append(StringConstants.NEW_LINE);
+
+        return method.toString();
+    }
+
+    private String genSaveListMethod(PojoClass pojoClass, String methodName) {
+        StringBuilder method = new StringBuilder();
+
+        method.append(StringConstants.TAB);
+
+        method.append("void ")
+                .append(methodName)
+                .append("(@Param(")
+                .append("\"entityList\")")
+                .append(" List<")
+                .append(pojoClass.getClassName()).append(pojoClass.getClassNameSuffix())
+                .append(">")
+                .append(" entityList")
                 .append(");");
 
         method.append(StringConstants.NEW_LINE);
