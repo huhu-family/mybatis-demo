@@ -263,7 +263,8 @@ public class MapperXmlService {
         foreach.addText(StringConstants.TAB);
         foreach.addText(StringConstants.TAB);
 
-        foreach.addText(fields.substring(0, fields.length() - 2));
+        String value = "(" + fields.substring(0, fields.length() - 2) + ")";
+        foreach.addText(value);
 
         foreach.addText(StringConstants.NEW_LINE);
         foreach.addText(StringConstants.TAB);

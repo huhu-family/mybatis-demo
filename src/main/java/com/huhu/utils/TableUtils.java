@@ -107,6 +107,7 @@ public class TableUtils {
                 break;
             case "char":
             case "varchar":
+            case "blob":
                 javaType = "String";
                 break;
             case "decimal":

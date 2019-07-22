@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -177,7 +178,15 @@ public class PojoClass {
             result.append(StringConstants.NEW_LINE);
 
             result.append(StringConstants.TAB).append("/**").append(StringConstants.NEW_LINE)
-                    .append(StringConstants.TAB).append(" * ").append(field.getComment()).append(StringConstants.NEW_LINE)
+                    .append(StringConstants.TAB).append(" * ");
+
+            if (Objects.isNull(field.getComment())) {
+                result.append(field.getName());
+            } else {
+                result.append(field.getComment());
+            }
+
+            result.append(StringConstants.NEW_LINE)
                     .append(StringConstants.TAB).append(" */").append(StringConstants.NEW_LINE);
 
             result.append(StringConstants.TAB).append("private ")

@@ -43,13 +43,15 @@ public class TableService {
                 String[] columnSQL = lines[i].trim().split("\\s+");
 
                 if ("PRIMARY".equalsIgnoreCase(columnSQL[0])
-                        || "KEY".equalsIgnoreCase(columnSQL[0])) {
+                        || "KEY".equalsIgnoreCase(columnSQL[0])
+                        || "CONSTRAINT".equalsIgnoreCase(columnSQL[0])) {
                     continue;
                 }
 
                 // UNIQUE KEY `uniq_customer_id` (`customer_id`),
+                // UNIQUE KEY `uniq_customer_id` (`customer_id`)
                 if ("UNIQUE".equalsIgnoreCase(columnSQL[0])) {
-                    if ("(`customer_id`)".equalsIgnoreCase(columnSQL[3].substring(0, columnSQL[3].length() - 1))) {
+                    if (columnSQL[3].substring(2).startsWith("customer_id")) {
                         table.setUniqueCustomerId(true);
                     }
                     continue;
@@ -74,19 +76,21 @@ public class TableService {
                     // columnSQL[2]=NOT
                     // columnSQL[3]=NULL
                     // columnSQL[4]=DEFAULT
-                    String defalutValue = columnSQL[5];
-                    column.setDefaultValue(defalutValue.replaceAll("'", ""));
+                    int defaultIndex = indexOf(columnSQL, "DEFAULT");
+                    if (defaultIndex > 0) {
+                        String defalutValue = columnSQL[defaultIndex + 1];
+                        column.setDefaultValue(defalutValue.replaceAll("'", ""));
+                    }
 
-                    int commentIndex = 6;
-                    while(!"COMMENT".equalsIgnoreCase(columnSQL[commentIndex])) {
-                        commentIndex++;
+                    int commentIndex = indexOf(columnSQL, "COMMENT");
+                    if (commentIndex > 0) {
+                        StringBuilder columnComment = new StringBuilder();
+                        for (int j = commentIndex + 1; j < columnSQL.length; j++){
+                            columnComment.append(columnSQL[j]).append(" ");
+                        }
+                        // 去掉前面的 ' 符号，以及后面的 ', 和空格
+                        column.setComment(columnComment.substring(1, columnComment.length() - 3));
                     }
-                    StringBuilder columnComment = new StringBuilder();
-                    for (int j = commentIndex + 1; j < columnSQL.length; j++){
-                        columnComment.append(columnSQL[j]).append(" ");
-                    }
-                    // 去掉前面的 ' 符号，以及后面的 ', 和空格
-                    column.setComment(columnComment.substring(1, columnComment.length() - 3));
                 }
 
                 table.addColumn(column);
@@ -106,5 +110,14 @@ public class TableService {
             }
         }
         return null;
+    }
+
+    private int indexOf(String[] columnSQL, String tag) {
+        for (int i = 0; i < columnSQL.length; i ++) {
+            if (tag.equalsIgnoreCase(columnSQL[i])) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
