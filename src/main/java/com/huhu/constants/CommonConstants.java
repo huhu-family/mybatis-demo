@@ -16,7 +16,7 @@ public interface CommonConstants {
     /**
      * DAO 的后缀
      */
-    String DAO_SUFFIX = "QueryDao";
+    String DAO_SUFFIX = "Dao";
 
     /**
      * Java 文件后缀

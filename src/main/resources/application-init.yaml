@@ -1,5 +1,5 @@
 package-config:
-  do-package: "me.huakai.domain.entity"
-  dao-package: "me.huakai.querydao"
-  java-src-path: C:\Users\wilimm\Desktop\huakai\demo
-  xml-path: C:\Users\wilimm\Desktop\huakai\demo
+  do-package: "com.wilimm.practise.spring.entity"
+  dao-package: "com.wilimm.practise.spring.dao"
+  java-src-path: D:\work\github\java-practise\spring\src\main\java
+  xml-path: D:\work\github\java-practise\spring\src\main\resources\mybatis
